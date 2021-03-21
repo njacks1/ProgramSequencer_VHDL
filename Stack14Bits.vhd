@@ -4,7 +4,7 @@ use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
 
-entity stack is  
+entity Stack14Bits is  
 generic(N:integer := 14;M:integer := 4);     -- The size of the stack can be changed
 port( push,pop,reset: IN std_logic;
 	data_in: IN std_logic_vector(N-1 downto 0);         
@@ -13,9 +13,9 @@ port( push,pop,reset: IN std_logic;
 	--index : OUT std_logic_vector(15 downto 0);	--Do not need this
 	overflow,underflow: OUT std_logic   
  );
-end stack;
+end Stack14Bits;
 
-architecture behav of Stack18Bits is  
+architecture behav of Stack14Bits is  
 type arr is array (0 to M) of std_logic_vector(N-1 downto 0);   -- Array of M rows and N columns
 	begin
 		process(clk)
