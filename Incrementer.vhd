@@ -4,15 +4,16 @@ use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
 
-entity Incrementer is  
+entity Incrementer18bit is  
 port( 
     incrementer_input : IN std_logic_vector(17 downto 0)    --Input number to Incrementer
     enable : IN std_logic   --on/off switch for Incrementer
     incrementer_output : OUT std_logic_vector(17 downto 0)     --Output number (incrementer_input + 1) from Incrementer
  );
-end Incrementer;
+end Incrementer18bit;
 
-architecture behav of Stack18Bits is
+architecture behav of Incrementer18bit is
+    begin
         process(incrementer_input, enable)  --Not sure if enable is suppose to be in the process list
             begin
                 if(enable = '1') then
