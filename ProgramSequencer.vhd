@@ -126,24 +126,27 @@ architecture behav of ProgramSequencer is
         signal sig1 : std_logic_vector(17 downto 0);                --Loop Stack output
         signal sig2 : std_logic;                                    --Condition Logic output
         signal sig3 : std_logic;                                    --Loop Comparator output
-        signal sig4, sig5, sig6 : std_logic_vector(1 downto 0);     --Signals for pop, push, reset from StackController
+        signal sig4, sig5 : std_logic_vector(1 downto 0);     --Signals for pop, push, reset from StackController       --Took out reset for right now
         signal sig7, sig8 : std_logic_vector(13 downto 0);          --Wires for PC Stack
         signal sig9, sig10 : std_logic_vector(1 downto 0);          --Signals for overflow and underflow from PC and Loop Stack
         signal sig11 : std_logic_vector(13 downto 0);               --2to1Mux output
         signal sig12 : std_logic_vector(13 downto 0);               --PC Register output
         signal sig13 : std_logic_vector(1 downto 0);                --Selector bits for 3to1 MUX
 
+        stk_underflow <= sig10(0) or sig10(1);
+        stk_overflow <= sig9(0) or sig9(1);
+
         --Stack Controller
         StackController : Stack_Controller port map(clk, reset, instruction, (sig2 & sig3), sig4, sig5, sig6);
 
         --PC Stuff
-        PCStack : Stack14Bits port map(sig4(0), sig5(0), sig6(0), sig7, clk, sig8, sig9(0), sig10(0));
+        PCStack : Stack14Bits port map(sig4(0), sig5(0), reset, sig7, clk, sig8, sig9(0), sig10(0));
         PCRegister : Register16 port map(clk, '1', reset, sig11, sig12);
         PCIncrement : Incrementer18bit port map(sig12, '1', sig7);
 
 
         --Loop Stuff
-        LoopStack : Stack18Bits port map(sig4(1), sig5(1), sig6(1), instruction(17 downto 0), clk, sig1, sig9(1), sig10(1));
+        LoopStack : Stack18Bits port map(sig4(1), sig5(1), reset, instruction(17 downto 0), clk, sig1, sig9(1), sig10(1));
         LoopComparator : LoopComparator_14Bit port map(sig11, sig1(17 downto 4), clk, sig3);
 
 
@@ -152,7 +155,7 @@ architecture behav of ProgramSequencer is
 
 
         --Next Address Source Select
-        NextAddressSourceSelect : next_address_Selector port map(instruction, sig2, sig3, '0', sig13, clk);
+        NextAddressSourceSelect : next_address_Selector port map(instruction, sig2, sig3, reset, sig13, clk);
 
 
         --MUXs
