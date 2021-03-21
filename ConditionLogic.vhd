@@ -5,8 +5,8 @@ entity Condition_Logic is
 port (	cond_code	: IN std_logic_vector(3 downto 0);	-- condition code from the instruction
 	loop_cond	: IN std_logic_vector(3 downto 0);	-- condition for the DO Util loop
 	status		: IN std_logic_vector(6 downto 0);	-- data from register ASTAT
-	CE		: IN std_logic;				-- CE condition for the DO Util Loop
-	s       	: IN std_logic;	-- control signal to select which condition code to check
+	CE		: IN std_logic;				-- CE condition for the DO Until Loop
+	full_loop_signal       	: IN std_logic_vector(17 downto 0);	-- control signal to select which condition code to check
 	cond		: OUT std_logic
 	);
 
@@ -17,7 +17,7 @@ begin
 	process (cond_code, loop_cond)
 	variable c : std_logic;
 	begin
-		if (s = '1') then
+		if (full_loop_signal = "000000000000000000") then
 			case cond_code is		
 				when "0000" => c := status(0);		-- EQ
 				when "0001" => c := not status(0);	-- NE
@@ -37,7 +37,7 @@ begin
 				when "1111" => c := '1';		-- Always true		
 				when others => c := '0';		
 			end case;
-		elsif (s = '0') then	
+		else
 			case loop_cond is 		
 				when "0000" => c := not status(0);	-- NE			
 				when "0001" => c := status(0);		-- EQ			
