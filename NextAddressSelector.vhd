@@ -11,7 +11,7 @@ entity next_address_Selector is
 	      add_sel	        : OUT std_logic_vector(1 downto 0);
 	      Clk 		: IN std_logic
 );
-end next_address_Selector ;
+end next_address_Selector;
 
 
 architecture behav of next_address_Selector is 
